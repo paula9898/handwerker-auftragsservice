@@ -9,13 +9,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-public class Customer extends BaseEntity<UUID> {
+public class Customer extends BaseEntity {
     private String firstname;
     private String surname;
     private String phone;

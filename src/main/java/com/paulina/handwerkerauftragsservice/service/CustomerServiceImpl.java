@@ -21,6 +21,10 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer createCustomer(Customer customer) {
+
+        if(customer.getId() == null) {
+            customer.setId(UUID.randomUUID().toString());
+        }
         customer.setFirstname(customer.getFirstname());
         customer.setSurname(customer.getSurname());
         customer.setEmail(customer.getEmail());
@@ -41,6 +45,6 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public List<Customer> getAllCustomers() {
-        return List.of();
+        return customerRepository.findAll();
     }
 }
