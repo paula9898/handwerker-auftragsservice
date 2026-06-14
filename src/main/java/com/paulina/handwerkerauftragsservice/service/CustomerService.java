@@ -1,14 +1,13 @@
 package com.paulina.handwerkerauftragsservice.service;
 
-import com.paulina.handwerkerauftragsservice.model.entity.Address;
 import com.paulina.handwerkerauftragsservice.model.entity.Customer;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface CustomerService {
     Customer createCustomer(Customer customer);
-    Customer getCustomerById(UUID id);
-    Customer updateCustomer(Customer customer);
+    Customer getCustomerById(String id);
+    Customer updateCustomer(String id,Customer customer);
+    void deleteCustomer(String id);
     List<Customer> getAllCustomers();
 }
