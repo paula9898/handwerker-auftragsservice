@@ -3,7 +3,7 @@ package com.paulina.handwerkerauftragsservice.model.entity;
 import com.paulina.handwerkerauftragsservice.model.entity.base.BaseEntity;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,11 +15,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-public class Customer extends BaseEntity {
-    private String firstname;
+public class Employee extends BaseEntity {
+    private String firstName;
     private String surname;
     private String phone;
     private String email;
+    private String specialization;
     @Embedded
     private Address address;
 }

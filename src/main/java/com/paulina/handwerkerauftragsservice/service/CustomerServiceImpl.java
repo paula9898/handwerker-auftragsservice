@@ -6,12 +6,10 @@ import com.paulina.handwerkerauftragsservice.repository.base.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
 @Service
-
 public class CustomerServiceImpl implements CustomerService{
     private final CustomerRepository customerRepository;
 
@@ -32,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer getCustomerById(String id) {
         return customerRepository.findById(id)
                 .orElseThrow(() ->
-                        new CustomerNotFoundException("The custommer with " + id + "was not found"));
+                        new CustomerNotFoundException("Customer with " + id + "was not found"));
     }
 
     @Override
@@ -53,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public void deleteCustomer(String id) {
         Customer customerToDelete = customerRepository.findById(id) .orElseThrow(() ->
-                new CustomerNotFoundException("The custommer with " + id + "was not found"));
+                new CustomerNotFoundException("Customer with " + id + "was not found"));
 
         customerRepository.delete(customerToDelete);
     }

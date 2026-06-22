@@ -2,8 +2,6 @@ package com.paulina.handwerkerauftragsservice.controller;
 import com.paulina.handwerkerauftragsservice.exception.CustomerNotFoundException;
 import com.paulina.handwerkerauftragsservice.model.entity.Customer;
 import com.paulina.handwerkerauftragsservice.service.CustomerService;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
