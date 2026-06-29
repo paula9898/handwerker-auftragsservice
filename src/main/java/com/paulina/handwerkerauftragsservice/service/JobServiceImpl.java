@@ -1,21 +1,30 @@
 package com.paulina.handwerkerauftragsservice.service;
 
+import com.paulina.handwerkerauftragsservice.exception.CustomerNotFoundException;
 import com.paulina.handwerkerauftragsservice.exception.EmployeeNotFoundException;
 import com.paulina.handwerkerauftragsservice.exception.JobNotFoundException;
+import com.paulina.handwerkerauftragsservice.model.entity.Customer;
 import com.paulina.handwerkerauftragsservice.model.entity.Employee;
 import com.paulina.handwerkerauftragsservice.model.entity.Job;
+import com.paulina.handwerkerauftragsservice.repository.base.CustomerRepository;
 import com.paulina.handwerkerauftragsservice.repository.base.EmployeeRepository;
 import com.paulina.handwerkerauftragsservice.repository.base.JobRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 @Service
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
+    private final CustomerRepository customerRepository;
+    private final EmployeeRepository employeeRepository;
 
-    public JobServiceImpl(JobRepository jobRepository) {
+
+    public JobServiceImpl(JobRepository jobRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository) {
         this.jobRepository = jobRepository;
+        this.customerRepository = customerRepository;
+        this.employeeRepository = employeeRepository;
     }
 
 
@@ -25,7 +34,20 @@ public class JobServiceImpl implements JobService {
             job.setId(UUID.randomUUID().toString());
         }
 
-        return job;
+        String customerId = job.getCustomer().getId();
+        String employeeId = job.getEmployee().getId();
+
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
+                new CustomerNotFoundException("Customer with id "+ customerId + "was not found"));
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->
+                new EmployeeNotFoundException("Employee with id "+ employeeId + "was not found"));
+
+        job.setCustomer(customer);
+        job.setEmployee(employee);
+
+
+        return jobRepository.save(job);
     }
 
     @Override
