@@ -2,6 +2,7 @@ package com.paulina.handwerkerauftragsservice.controller;
 
 import com.paulina.handwerkerauftragsservice.model.entity.Employee;
 import com.paulina.handwerkerauftragsservice.model.entity.Job;
+import com.paulina.handwerkerauftragsservice.model.enums.JobStatus;
 import com.paulina.handwerkerauftragsservice.service.EmployeeService;
 import com.paulina.handwerkerauftragsservice.service.JobService;
 import org.springframework.web.bind.annotation.*;
@@ -43,4 +44,16 @@ public class JobController {
 
         return "Deleted job with id - " + id;
     }
+
+    @PatchMapping("/{id}/status")
+    public Job changeJobStatus(@PathVariable String id, @RequestParam JobStatus status) {
+        return jobService.updateJobStatus(id,status);
+    }
+
+    @PatchMapping("/{id}/employee/{employeeId}")
+    public Job assignEmployee(@PathVariable String id, @PathVariable String employeeId) {
+        return jobService.assignEmployee(id,employeeId);
+    }
+
+
 }

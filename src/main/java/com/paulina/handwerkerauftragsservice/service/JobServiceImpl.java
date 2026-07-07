@@ -6,6 +6,7 @@ import com.paulina.handwerkerauftragsservice.exception.JobNotFoundException;
 import com.paulina.handwerkerauftragsservice.model.entity.Customer;
 import com.paulina.handwerkerauftragsservice.model.entity.Employee;
 import com.paulina.handwerkerauftragsservice.model.entity.Job;
+import com.paulina.handwerkerauftragsservice.model.enums.JobStatus;
 import com.paulina.handwerkerauftragsservice.repository.base.CustomerRepository;
 import com.paulina.handwerkerauftragsservice.repository.base.EmployeeRepository;
 import com.paulina.handwerkerauftragsservice.repository.base.JobRepository;
@@ -60,14 +61,24 @@ public class JobServiceImpl implements JobService {
     @Override
     public Job updateJob(String id, Job job) {
         Job foundJob = jobRepository.findById(id).orElseThrow(
-                () -> new JobNotFoundException("Job with: " + id + "not found")
+                () -> new JobNotFoundException("Job with: " + id + " not found")
         );
 
         foundJob.setTitle(job.getTitle());
         foundJob.setDescription(job.getDescription());
         foundJob.setStatus(job.getStatus());
-        foundJob.setCustomer(job.getCustomer());
-        foundJob.setEmployee(job.getEmployee());
+
+        String customerId = job.getCustomer().getId();
+        String employeeId = job.getEmployee().getId();
+
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
+                new CustomerNotFoundException("Customer with id "+ customerId + "was not found"));
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->
+                new EmployeeNotFoundException("Employee with id "+ employeeId + "was not found"));
+
+        foundJob.setCustomer(customer);
+        foundJob.setEmployee(employee);
 
         return jobRepository.save(foundJob);
     }
@@ -75,7 +86,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public void deleteJob(String id) {
         Job jobToDelete = jobRepository.findById(id) .orElseThrow(() ->
-                new JobNotFoundException("Job  with " + id + "was not found"));
+                new JobNotFoundException("Job  with " + id + " was not found"));
 
         jobRepository.delete(jobToDelete);
 
@@ -84,5 +95,27 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
+    }
+
+    @Override
+    public Job updateJobStatus(String id, JobStatus status) {
+        Job jobToFind = jobRepository.findById(id).orElseThrow(() ->
+                new JobNotFoundException(("Job with " + id + " was not found")));
+        jobToFind.setStatus(status);
+
+        return jobRepository.save(jobToFind);
+    }
+
+    @Override
+    public Job assignEmployee(String jobId, String employeeId) {
+        Job jobToFind = jobRepository.findById(jobId).orElseThrow(() ->
+                new JobNotFoundException(("Job with " + jobId + " was not found")));
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(() ->
+                new EmployeeNotFoundException("Employee with " + employeeId + " was not found"));
+
+        jobToFind.setEmployee(employee);
+
+        return jobRepository.save(jobToFind);
     }
 }
